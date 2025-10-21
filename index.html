@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guitar Tuner</title>
+<style>
+  body { 
+    font-family: system-ui, -apple-system, sans-serif; 
+    text-align: center; 
+    margin: 0;
+    padding: 20px;
+    background: #f8f9fa;
+    color: #333;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    padding: 30px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  h1 {
+    margin: 0 0 30px 0;
+    font-weight: 600;
+    font-size: 28px;
+  }
+  
+  .mode-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    justify-content: center;
+  }
+  
+  .mode-btn {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  
+  .mode-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  
+  #note {
+    font-size: 52px;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #007bff;
+    min-height: 60px;
+  }
+  
+  #status {
+    font-size: 18px;
+    margin: 10px 0 30px 0;
+    min-height: 27px;
+  }
+  
+  .chords-section {
+    display: none;
+    margin-top: 30px;
+  }
+  
+  .chords-section.active {
+    display: block;
+  }
+  
+  .chord-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .chord-btn {
+    padding: 15px 10px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  
+  .chord-btn:hover {
+    background: #f8f9fa;
+  }
+  
+  .chord-btn.active {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+  }
+  
+  .chord-info {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: none;
+  }
+  
+  .chord-info.active {
+    display: block;
+  }
+  
+  .chord-diagram {
+    font-family: monospace;
+    white-space: pre;
+    margin: 15px 0;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Guitar Assistant</h1>
+    
+    <div class="mode-selector">
+      <button class="mode-btn active" data-mode="tuner">Tuner</button>
+      <button class="mode-btn" data-mode="chords">Learn Chords</button>
+    </div>
+    
+    <div id="tuner-section">
+      <div id="note">---</div>
+      <div id="status">Start playing a string...</div>
+    </div>
+    
+    <div id="chords-section" class="chords-section">
+      <div class="chord-grid">
+        <button class="chord-btn" data-chord="C">C</button>
+        <button class="chord-btn" data-chord="D">D</button>
+        <button class="chord-btn" data-chord="E">E</button>
+        <button class="chord-btn" data-chord="G">G</button>
+        <button class="chord-btn" data-chord="A">A</button>
+        <button class="chord-btn" data-chord="Am">Am</button>
+        <button class="chord-btn" data-chord="Em">Em</button>
+        <button class="chord-btn" data-chord="Dm">Dm</button>
+        <button class="chord-btn" data-chord="F">F</button>
+      </div>
+      
+      <div id="chord-info" class="chord-info">
+        <h3 id="chord-name"></h3>
+        <div id="chord-fingering" class="chord-diagram"></div>
+        <div id="chord-notes"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+const targetNotes = {
+  "E4": 329.63,
+  "B3": 246.94,
+  "G3": 196.00,
+  "D3": 146.83,
+  "A2": 110.00,
+  "E2": 82.41
+};
+
+// Chord database
+const chords = {
+  "C": {
+    fingering: `
+e |-0-|
+B |-1-|
+G |-0-|
+D |-2-|
+A |-3-|
+E |-X-|
+    `,
+    notes: "C E G"
+  },
+  "D": {
+    fingering: `
+e |-2-|
+B |-3-|
+G |-2-|
+D |-0-|
+A |-X-|
+E |-X-|
+    `,
+    notes: "D F# A"
+  },
+  "E": {
+    fingering: `
+e |-0-|
+B |-0-|
+G |-1-|
+D |-2-|
+A |-2-|
+E |-0-|
+    `,
+    notes: "E G# B"
+  },
+  "G": {
+    fingering: `
+e |-3-|
+B |-0-|
+G |-0-|
+D |-0-|
+A |-2-|
+E |-3-|
+    `,
+    notes: "G B D"
+  },
+  "A": {
+    fingering: `
+e |-0-|
+B |-2-|
+G |-2-|
+D |-2-|
+A |-0-|
+E |-X-|
+    `,
+    notes: "A C# E"
+  },
+  "Am": {
+    fingering: `
+e |-0-|
+B |-1-|
+G |-2-|
+D |-2-|
+A |-0-|
+E |-X-|
+    `,
+    notes: "A C E"
+  },
+  "Em": {
+    fingering: `
+e |-0-|
+B |-0-|
+G |-0-|
+D |-2-|
+A |-2-|
+E |-0-|
+    `,
+    notes: "E G B"
+  },
+  "Dm": {
+    fingering: `
+e |-1-|
+B |-3-|
+G |-2-|
+D |-0-|
+A |-X-|
+E |-X-|
+    `,
+    notes: "D F A"
+  },
+  "F": {
+    fingering: `
+e |-1-|
+B |-1-|
+G |-2-|
+D |-3-|
+A |-3-|
+E |-1-|
+    `,
+    notes: "F A C"
+  }
+};
+
+// Mode switching
+const modeBtns = document.querySelectorAll('.mode-btn');
+const tunerSection = document.getElementById('tuner-section');
+const chordsSection = document.getElementById('chords-section');
+
+modeBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    modeBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const mode = btn.dataset.mode;
+    if (mode === 'tuner') {
+      tunerSection.style.display = 'block';
+      chordsSection.classList.remove('active');
+    } else {
+      tunerSection.style.display = 'none';
+      chordsSection.classList.add('active');
+    }
+  });
+});
+
+// Chord selection
+const chordBtns = document.querySelectorAll('.chord-btn');
+const chordInfo = document.getElementById('chord-info');
+const chordName = document.getElementById('chord-name');
+const chordFingering = document.getElementById('chord-fingering');
+const chordNotes = document.getElementById('chord-notes');
+
+chordBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    chordBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    const chord = btn.dataset.chord;
+    const chordData = chords[chord];
+    
+    chordName.textContent = `${chord} Chord`;
+    chordFingering.textContent = chordData.fingering;
+    chordNotes.textContent = `Notes: ${chordData.notes}`;
+    
+    chordInfo.classList.add('active');
+  });
+});
+
+// Audio processing (tuner)
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let analyser = audioCtx.createAnalyser();
+analyser.fftSize = 2048;
+let bufferLength = analyser.fftSize;
+let dataArray = new Float32Array(bufferLength);
+
+navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+    const source = audioCtx.createMediaStreamSource(stream);
+    source.connect(analyser);
+    detectPitch();
+}).catch(err => {
+    alert("Microphone access denied: " + err);
+});
+
+function detectPitch() {
+    analyser.getFloatTimeDomainData(dataArray);
+    let pitch = autoCorrelate(dataArray, audioCtx.sampleRate);
+    if (pitch !== -1) {
+        let closest = null;
+        let minDiff = Infinity;
+        for (let n in targetNotes) {
+            let diff = Math.abs(targetNotes[n] - pitch);
+            if (diff < minDiff) {
+                minDiff = diff;
+                closest = n;
+            }
+        }
+        document.getElementById("note").textContent = closest;
+        if (minDiff < 2) {
+            document.getElementById("status").textContent = "In tune ✅";
+        } else if (pitch < targetNotes[closest]) {
+            document.getElementById("status").textContent = "Too low ⬇️";
+        } else {
+            document.getElementById("status").textContent = "Too high ⬆️";
+        }
+    } else {
+        document.getElementById("note").textContent = "---";
+        document.getElementById("status").textContent = "Play a string...";
+    }
+    requestAnimationFrame(detectPitch);
+}
+
+// Auto-correlation algorithm
+function autoCorrelate(buf, sampleRate) {
+    let SIZE = buf.length;
+    let rms = 0;
+    for (let i = 0; i < SIZE; i++) { rms += buf[i]*buf[i]; }
+    rms = Math.sqrt(rms/SIZE);
+    if (rms < 0.01) return -1; // silence
+    let r = new Array(SIZE).fill(0);
+    for (let i = 0; i < SIZE; i++) {
+        for (let j = 0; j < SIZE - i; j++) {
+            r[i] += buf[j]*buf[j+i];
+        }
+    }
+    let d = 0; while (r[d] > r[d+1]) d++;
+    let maxval = -1, maxpos = -1;
+    for (let i = d; i < SIZE; i++) {
+        if (r[i] > maxval) {
+            maxval = r[i];
+            maxpos = i;
+        }
+    }
+    let T0 = maxpos;
+    if (T0 == 0) return -1;
+    return sampleRate / T0;
+}
+</script>
+</body>
+</html>
