@@ -5,267 +5,509 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guitar Assistant</title>
 <style>
-  body { 
-    font-family: system-ui, -apple-system, sans-serif; 
-    text-align: center; 
-    margin: 0;
-    padding: 20px;
-    background: #f8f9fa;
-    color: #333;
-    min-height: 100vh;
+  :root {
+    --primary: #4361ee;
+    --secondary: #3a0ca3;
+    --success: #4cc9f0;
+    --danger: #f72585;
+    --warning: #f8961e;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #6c757d;
+    --border-radius: 16px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
   }
-  
-  .container {
-    max-width: 500px;
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--dark);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .app-container {
+    max-width: 1200px;
     margin: 0 auto;
     background: white;
-    border-radius: 12px;
-    padding: 30px 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  
-  h1 {
-    margin: 0 0 30px 0;
-    font-weight: 600;
-    font-size: 28px;
-  }
-  
-  .mode-selector {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    min-height: calc(100vh - 40px);
     display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
-    justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
   }
-  
-  .mode-btn {
-    padding: 10px 20px;
-    border: 1px solid #ddd;
-    background: white;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s;
-  }
-  
-  .mode-btn.active {
-    background: #007bff;
+
+  /* Header */
+  .app-header {
+    background: var(--primary);
     color: white;
-    border-color: #007bff;
+    padding: 20px;
+    text-align: center;
   }
-  
-  #note {
-    font-size: 52px;
-    font-weight: bold;
-    margin: 20px 0;
-    color: #007bff;
-    min-height: 60px;
+
+  .app-title {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 700;
+    margin-bottom: 10px;
   }
-  
-  #status {
-    font-size: 18px;
-    margin: 10px 0 30px 0;
-    min-height: 27px;
+
+  .app-subtitle {
+    font-size: clamp(14px, 2vw, 16px);
+    opacity: 0.9;
   }
-  
-  .chords-section, .metronome-section {
-    display: none;
-    margin-top: 30px;
-  }
-  
-  .chords-section.active, .metronome-section.active {
-    display: block;
-  }
-  
-  .chord-grid {
+
+  /* Navigation */
+  .nav-tabs {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-top: 20px;
+    background: var(--light);
+    border-bottom: 1px solid #dee2e6;
   }
-  
-  .chord-btn, .metronome-btn {
-    padding: 15px 10px;
-    border: 1px solid #ddd;
-    background: white;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
+
+  .nav-tab {
+    padding: 20px 15px;
+    text-align: center;
+    background: none;
+    border: none;
+    font-size: clamp(14px, 2vw, 16px);
     font-weight: 600;
-    transition: all 0.2s;
+    color: var(--gray);
+    cursor: pointer;
+    transition: var(--transition);
+    border-bottom: 3px solid transparent;
   }
-  
-  .chord-btn:hover, .metronome-btn:hover {
-    background: #f8f9fa;
+
+  .nav-tab.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    background: white;
   }
-  
-  .chord-btn.active {
-    background: #28a745;
-    color: white;
-    border-color: #28a745;
+
+  .nav-tab i {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 8px;
   }
-  
-  .metronome-btn.active {
-    background: #dc3545;
-    color: white;
-    border-color: #dc3545;
-  }
-  
-  .chord-info {
-    margin-top: 20px;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 8px;
+
+  /* Content Sections */
+  .tab-content {
+    flex: 1;
+    padding: 30px 20px;
     display: none;
   }
-  
-  .chord-info.active {
+
+  .tab-content.active {
     display: block;
   }
-  
+
+  /* Tuner Section */
+  .tuner-display {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .note-display {
+    font-size: clamp(48px, 10vw, 80px);
+    font-weight: 800;
+    color: var(--primary);
+    margin: 20px 0;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .status-display {
+    font-size: clamp(18px, 3vw, 24px);
+    color: var(--gray);
+    min-height: 30px;
+  }
+
+  .tuner-visual {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    position: relative;
+    background: conic-gradient(from 0deg, #4cc9f0, #4361ee, #3a0ca3, #4361ee, #4cc9f0);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tuner-center {
+    width: 80%;
+    height: 80%;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  /* Chords Section */
+  .chords-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .chord-card {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  .chord-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .chord-card.active {
+    border-color: var(--success);
+    background: var(--success);
+    color: white;
+  }
+
+  .chord-detail {
+    background: var(--light);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+  }
+
   .chord-diagram {
-    font-family: monospace;
+    font-family: 'Courier New', monospace;
     white-space: pre;
-    margin: 15px 0;
-    font-size: 14px;
-    line-height: 1.3;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.4;
+    margin: 20px 0;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
   }
-  
-  .metronome-controls {
-    margin: 30px 0;
+
+  /* Metronome Section */
+  .metronome-display {
+    text-align: center;
+    margin-bottom: 30px;
   }
-  
-  .bpm-control {
+
+  .bpm-controls {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 20px;
-    margin: 20px 0;
+    margin: 30px 0;
+    flex-wrap: wrap;
   }
-  
+
   .bpm-btn {
-    width: 40px;
-    height: 40px;
-    border: 2px solid #007bff;
-    background: white;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background: var(--primary);
+    color: white;
     border-radius: 50%;
-    font-size: 20px;
+    font-size: 24px;
     cursor: pointer;
+    transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  
+
+  .bpm-btn:active {
+    transform: scale(0.95);
+  }
+
   .bpm-display {
-    font-size: 32px;
-    font-weight: bold;
-    color: #007bff;
-    min-width: 80px;
+    font-size: clamp(36px, 8vw, 48px);
+    font-weight: 800;
+    color: var(--primary);
+    min-width: 100px;
   }
-  
+
+  .bpm-input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    justify-content: center;
+  }
+
   .bpm-input {
-    width: 100px;
+    width: 80px;
     padding: 10px;
-    border: 2px solid #ddd;
+    border: 2px solid #e9ecef;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 18px;
     text-align: center;
+    font-weight: 600;
   }
-  
-  .visual-beat {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: #f8f9fa;
-    margin: 20px auto;
-    border: 3px solid #ddd;
-    transition: all 0.1s;
+
+  .metronome-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
   }
-  
-  .visual-beat.active {
-    background: #dc3545;
-    transform: scale(1.1);
-    border-color: #dc3545;
-  }
-  
-  .time-signature {
-    margin: 15px 0;
-  }
-  
-  .time-signature select {
-    padding: 8px 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
+
+  .control-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
     font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .primary-btn {
+    background: var(--primary);
+    color: white;
+  }
+
+  .primary-btn:active {
+    background: var(--secondary);
+  }
+
+  .secondary-btn {
+    background: var(--light);
+    color: var(--dark);
+    border: 2px solid #e9ecef;
+  }
+
+  .visual-beat {
+    width: 120px;
+    height: 120px;
+    margin: 30px auto;
+    border-radius: 50%;
+    background: var(--light);
+    border: 4px solid #e9ecef;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gray);
+  }
+
+  .visual-beat.active {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .beat-counter {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gray);
+    margin-top: 15px;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    body {
+      padding: 10px;
+    }
+
+    .app-container {
+      min-height: calc(100vh - 20px);
+    }
+
+    .nav-tab {
+      padding: 15px 10px;
+      font-size: 14px;
+    }
+
+    .nav-tab i {
+      font-size: 20px;
+    }
+
+    .tab-content {
+      padding: 20px 15px;
+    }
+
+    .chords-grid {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+    }
+
+    .chord-card {
+      padding: 15px 8px;
+      font-size: 16px;
+    }
+
+    .bpm-controls {
+      gap: 15px;
+    }
+
+    .bpm-btn {
+      width: 45px;
+      height: 45px;
+      font-size: 20px;
+    }
+
+    .control-btn {
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nav-tabs {
+      grid-template-columns: 1fr;
+    }
+
+    .nav-tab {
+      padding: 12px;
+    }
+
+    .chords-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .bpm-controls {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  /* Utility Classes */
+  .text-center { text-align: center; }
+  .mb-20 { margin-bottom: 20px; }
+  .mt-20 { margin-top: 20px; }
+  .hidden { display: none; }
+
+  /* Icons */
+  .icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Guitar Assistant</h1>
-    
-    <div class="mode-selector">
-      <button class="mode-btn active" data-mode="tuner">Tuner</button>
-      <button class="mode-btn" data-mode="chords">Learn Chords</button>
-      <button class="mode-btn" data-mode="metronome">Metronome</button>
-    </div>
-    
-    <div id="tuner-section">
-      <div id="note">---</div>
-      <div id="status">Start playing a string...</div>
-    </div>
-    
-    <div id="chords-section" class="chords-section">
-      <div class="chord-grid">
-        <button class="chord-btn" data-chord="C">C</button>
-        <button class="chord-btn" data-chord="D">D</button>
-        <button class="chord-btn" data-chord="E">E</button>
-        <button class="chord-btn" data-chord="G">G</button>
-        <button class="chord-btn" data-chord="A">A</button>
-        <button class="chord-btn" data-chord="Am">Am</button>
-        <button class="chord-btn" data-chord="Em">Em</button>
-        <button class="chord-btn" data-chord="Dm">Dm</button>
-        <button class="chord-btn" data-chord="F">F</button>
+  <div class="app-container">
+    <header class="app-header">
+      <h1 class="app-title">🎸 Guitar Assistant</h1>
+      <p class="app-subtitle">Your all-in-one guitar toolkit</p>
+    </header>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="tuner">
+        <span>🎯</span>
+        Tuner
+      </button>
+      <button class="nav-tab" data-tab="chords">
+        <span>🎵</span>
+        Chords
+      </button>
+      <button class="nav-tab" data-tab="metronome">
+        <span>⏱️</span>
+        Metronome
+      </button>
+    </nav>
+
+    <!-- Tuner Section -->
+    <section id="tuner" class="tab-content active">
+      <div class="tuner-display">
+        <div class="note-display">---</div>
+        <div class="status-display">Play a guitar string to start tuning</div>
       </div>
+      <div class="tuner-visual">
+        <div class="tuner-center">TUNE</div>
+      </div>
+    </section>
+
+    <!-- Chords Section -->
+    <section id="chords" class="tab-content">
+      <h2 class="text-center mb-20">Learn Guitar Chords</h2>
+      <div class="chords-grid">
+        <div class="chord-card" data-chord="C">C</div>
+        <div class="chord-card" data-chord="D">D</div>
+        <div class="chord-card" data-chord="E">E</div>
+        <div class="chord-card" data-chord="G">G</div>
+        <div class="chord-card" data-chord="A">A</div>
+        <div class="chord-card" data-chord="Am">Am</div>
+        <div class="chord-card" data-chord="Em">Em</div>
+        <div class="chord-card" data-chord="Dm">Dm</div>
+        <div class="chord-card" data-chord="F">F</div>
+      </div>
+
+      <div class="chord-detail hidden">
+        <h3 class="text-center" id="chord-name">Select a chord</h3>
+        <div class="chord-diagram" id="chord-fingering">
+Select a chord from above to see the diagram
+        </div>
+        <div class="text-center" id="chord-notes"></div>
+      </div>
+    </section>
+
+    <!-- Metronome Section -->
+    <section id="metronome" class="tab-content">
+      <h2 class="text-center mb-20">Metronome</h2>
       
-      <div id="chord-info" class="chord-info">
-        <h3 id="chord-name"></h3>
-        <div id="chord-fingering" class="chord-diagram"></div>
-        <div id="chord-notes"></div>
-      </div>
-    </div>
-    
-    <div id="metronome-section" class="metronome-section">
-      <div class="metronome-controls">
-        <div class="bpm-control">
+      <div class="metronome-display">
+        <div class="bpm-controls">
           <button class="bpm-btn" id="bpm-down">-</button>
           <div class="bpm-display" id="bpm-display">120</div>
           <button class="bpm-btn" id="bpm-up">+</button>
         </div>
-        
-        <div>
+
+        <div class="bpm-input-container">
           <input type="number" class="bpm-input" id="bpm-input" min="40" max="240" value="120">
           <span>BPM</span>
         </div>
-        
-        <div class="time-signature">
-          <label>Time Signature: </label>
-          <select id="time-signature">
-            <option value="4">4/4</option>
-            <option value="3">3/4</option>
-            <option value="6">6/8</option>
+
+        <div class="metronome-controls">
+          <select class="control-btn secondary-btn" id="time-signature">
+            <option value="4">4/4 Time</option>
+            <option value="3">3/4 Time</option>
+            <option value="6">6/8 Time</option>
           </select>
+          <button class="control-btn primary-btn" id="metronome-toggle">Start</button>
         </div>
-        
-        <button class="metronome-btn" id="metronome-toggle">Start</button>
+
+        <div class="visual-beat" id="visual-beat">
+          ●
+        </div>
+        <div class="beat-counter" id="beat-counter">Beat: 1</div>
       </div>
-      
-      <div class="visual-beat" id="visual-beat"></div>
-      <div id="beat-counter">Beat: 1</div>
-    </div>
+    </section>
   </div>
 
 <script>
+// Configuration
 const targetNotes = {
   "E4": 329.63,
   "B3": 246.94,
@@ -275,7 +517,6 @@ const targetNotes = {
   "E2": 82.41
 };
 
-// Chord database
 const chords = {
   "C": {
     fingering: `
@@ -286,7 +527,7 @@ D |-2-|
 A |-3-|
 E |-X-|
     `,
-    notes: "C E G"
+    notes: "Notes: C E G"
   },
   "D": {
     fingering: `
@@ -297,7 +538,7 @@ D |-0-|
 A |-X-|
 E |-X-|
     `,
-    notes: "D F# A"
+    notes: "Notes: D F# A"
   },
   "E": {
     fingering: `
@@ -308,7 +549,7 @@ D |-2-|
 A |-2-|
 E |-0-|
     `,
-    notes: "E G# B"
+    notes: "Notes: E G# B"
   },
   "G": {
     fingering: `
@@ -319,7 +560,7 @@ D |-0-|
 A |-2-|
 E |-3-|
     `,
-    notes: "G B D"
+    notes: "Notes: G B D"
   },
   "A": {
     fingering: `
@@ -330,7 +571,7 @@ D |-2-|
 A |-0-|
 E |-X-|
     `,
-    notes: "A C# E"
+    notes: "Notes: A C# E"
   },
   "Am": {
     fingering: `
@@ -341,7 +582,7 @@ D |-2-|
 A |-0-|
 E |-X-|
     `,
-    notes: "A C E"
+    notes: "Notes: A C E"
   },
   "Em": {
     fingering: `
@@ -352,7 +593,7 @@ D |-2-|
 A |-2-|
 E |-0-|
     `,
-    notes: "E G B"
+    notes: "Notes: E G B"
   },
   "Dm": {
     fingering: `
@@ -363,7 +604,7 @@ D |-0-|
 A |-X-|
 E |-X-|
     `,
-    notes: "D F A"
+    notes: "Notes: D F A"
   },
   "F": {
     fingering: `
@@ -374,67 +615,62 @@ D |-3-|
 A |-3-|
 E |-1-|
     `,
-    notes: "F A C"
+    notes: "Notes: F A C"
   }
 };
 
-// Metronome
-const metronome = {
-  audioContext: null,
-  isPlaying: false,
-  bpm: 120,
-  timeSignature: 4,
-  currentBeat: 0,
-  nextNoteTime: 0,
-  timerID: null,
-  lookahead: 25, // ms
-  scheduleAheadTime: 0.1, // seconds
-  notesInQueue: []
+// State Management
+const state = {
+  currentTab: 'tuner',
+  metronome: {
+    audioContext: null,
+    isPlaying: false,
+    bpm: 120,
+    timeSignature: 4,
+    currentBeat: 0,
+    nextNoteTime: 0,
+    timerID: null,
+    lookahead: 25,
+    scheduleAheadTime: 0.1
+  }
 };
 
-// Mode switching
-const modeBtns = document.querySelectorAll('.mode-btn');
-const tunerSection = document.getElementById('tuner-section');
-const chordsSection = document.getElementById('chords-section');
-const metronomeSection = document.getElementById('metronome-section');
+// Tab Navigation
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const targetTab = tab.dataset.tab;
+    
+    // Update active tab
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    tab.classList.add('active');
+    document.getElementById(targetTab).classList.add('active');
+    state.currentTab = targetTab;
 
-modeBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    modeBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    
-    const mode = btn.dataset.mode;
-    tunerSection.style.display = mode === 'tuner' ? 'block' : 'none';
-    chordsSection.classList.toggle('active', mode === 'chords');
-    metronomeSection.classList.toggle('active', mode === 'metronome');
-    
     // Stop metronome when switching away
-    if (mode !== 'metronome' && metronome.isPlaying) {
+    if (targetTab !== 'metronome' && state.metronome.isPlaying) {
       stopMetronome();
     }
   });
 });
 
-// Chord selection
-const chordBtns = document.querySelectorAll('.chord-btn');
-const chordInfo = document.getElementById('chord-info');
-const chordName = document.getElementById('chord-name');
-const chordFingering = document.getElementById('chord-fingering');
-const chordNotes = document.getElementById('chord-notes');
-
-chordBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    chordBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    
-    const chord = btn.dataset.chord;
+// Chord Selection
+document.querySelectorAll('.chord-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const chord = card.dataset.chord;
     const chordData = chords[chord];
     
-    chordName.textContent = `${chord} Chord`;
-    chordFingering.textContent = chordData.fingering;
-    chordNotes.textContent = `Notes: ${chordData.notes}`;
+    // Update active card
+    document.querySelectorAll('.chord-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
     
-    chordInfo.classList.add('active');
+    // Show chord details
+    const chordDetail = document.querySelector('.chord-detail');
+    chordDetail.classList.remove('hidden');
+    document.getElementById('chord-name').textContent = `${chord} Chord`;
+    document.getElementById('chord-fingering').textContent = chordData.fingering;
+    document.getElementById('chord-notes').textContent = chordData.notes;
   });
 });
 
@@ -448,93 +684,89 @@ const timeSignatureSelect = document.getElementById('time-signature');
 const visualBeat = document.getElementById('visual-beat');
 const beatCounter = document.getElementById('beat-counter');
 
-bpmUp.addEventListener('click', () => {
-  metronome.bpm = Math.min(240, metronome.bpm + 1);
-  updateBPMDisplay();
-});
-
-bpmDown.addEventListener('click', () => {
-  metronome.bpm = Math.max(40, metronome.bpm - 1);
-  updateBPMDisplay();
-});
-
-bpmInput.addEventListener('change', (e) => {
+// BPM Controls
+bpmUp.addEventListener('click', () => updateBPM(1));
+bpmDown.addEventListener('click', () => updateBPM(-1));
+bpmInput.addEventListener('input', (e) => {
   let bpm = parseInt(e.target.value);
   if (bpm >= 40 && bpm <= 240) {
-    metronome.bpm = bpm;
+    state.metronome.bpm = bpm;
     updateBPMDisplay();
   }
 });
 
 timeSignatureSelect.addEventListener('change', (e) => {
-  metronome.timeSignature = parseInt(e.target.value);
+  state.metronome.timeSignature = parseInt(e.target.value);
 });
 
 metronomeToggle.addEventListener('click', () => {
-  if (metronome.isPlaying) {
+  if (state.metronome.isPlaying) {
     stopMetronome();
   } else {
     startMetronome();
   }
 });
 
+function updateBPM(change) {
+  state.metronome.bpm = Math.max(40, Math.min(240, state.metronome.bpm + change));
+  updateBPMDisplay();
+}
+
 function updateBPMDisplay() {
-  bpmDisplay.textContent = metronome.bpm;
-  bpmInput.value = metronome.bpm;
+  bpmDisplay.textContent = state.metronome.bpm;
+  bpmInput.value = state.metronome.bpm;
 }
 
 function startMetronome() {
-  if (!metronome.audioContext) {
-    metronome.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  if (!state.metronome.audioContext) {
+    state.metronome.audioContext = new (window.AudioContext || window.webkitAudioContext)();
   }
   
-  metronome.isPlaying = true;
-  metronome.currentBeat = 0;
-  metronome.nextNoteTime = metronome.audioContext.currentTime;
+  state.metronome.isPlaying = true;
+  state.metronome.currentBeat = 0;
+  state.metronome.nextNoteTime = state.metronome.audioContext.currentTime;
   metronomeToggle.textContent = 'Stop';
-  metronomeToggle.classList.add('active');
   
   scheduler();
 }
 
 function stopMetronome() {
-  metronome.isPlaying = false;
+  state.metronome.isPlaying = false;
   metronomeToggle.textContent = 'Start';
-  metronomeToggle.classList.remove('active');
   visualBeat.classList.remove('active');
   
-  if (metronome.timerID) {
-    clearTimeout(metronome.timerID);
+  if (state.metronome.timerID) {
+    clearTimeout(state.metronome.timerID);
   }
 }
 
 function scheduler() {
-  if (!metronome.isPlaying) return;
+  if (!state.metronome.isPlaying) return;
   
-  while (metronome.nextNoteTime < metronome.audioContext.currentTime + metronome.scheduleAheadTime) {
-    scheduleNote(metronome.currentBeat, metronome.nextNoteTime);
+  while (state.metronome.nextNoteTime < state.metronome.audioContext.currentTime + state.metronome.scheduleAheadTime) {
+    scheduleNote(state.metronome.currentBeat, state.metronome.nextNoteTime);
     nextNote();
   }
   
-  metronome.timerID = setTimeout(scheduler, metronome.lookahead);
+  state.metronome.timerID = setTimeout(scheduler, state.metronome.lookahead);
 }
 
 function nextNote() {
-  const secondsPerBeat = 60.0 / metronome.bpm;
-  metronome.nextNoteTime += secondsPerBeat;
-  metronome.currentBeat++;
+  const secondsPerBeat = 60.0 / state.metronome.bpm;
+  state.metronome.nextNoteTime += secondsPerBeat;
+  state.metronome.currentBeat++;
   
-  if (metronome.currentBeat >= metronome.timeSignature) {
-    metronome.currentBeat = 0;
+  if (state.metronome.currentBeat >= state.metronome.timeSignature) {
+    state.metronome.currentBeat = 0;
   }
 }
 
 function scheduleNote(beatNumber, time) {
-  const osc = metronome.audioContext.createOscillator();
-  const gainNode = metronome.audioContext.createGain();
+  const osc = state.metronome.audioContext.createOscillator();
+  const gainNode = state.metronome.audioContext.createGain();
   
   osc.connect(gainNode);
-  gainNode.connect(metronome.audioContext.destination);
+  gainNode.connect(state.metronome.audioContext.destination);
   
   // First beat is accented
   if (beatNumber === 0) {
@@ -558,10 +790,10 @@ function scheduleNote(beatNumber, time) {
     setTimeout(() => {
       visualBeat.classList.remove('active');
     }, 100);
-  }, (time - metronome.audioContext.currentTime) * 1000);
+  }, (time - state.metronome.audioContext.currentTime) * 1000);
 }
 
-// Audio processing (tuner)
+// Tuner Functionality
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let analyser = audioCtx.createAnalyser();
 analyser.fftSize = 2048;
@@ -573,12 +805,16 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
     source.connect(analyser);
     detectPitch();
 }).catch(err => {
-    alert("Microphone access denied: " + err);
+    console.log("Microphone access denied: " + err);
 });
 
 function detectPitch() {
     analyser.getFloatTimeDomainData(dataArray);
     let pitch = autoCorrelate(dataArray, audioCtx.sampleRate);
+    
+    const noteDisplay = document.querySelector('.note-display');
+    const statusDisplay = document.querySelector('.status-display');
+    
     if (pitch !== -1) {
         let closest = null;
         let minDiff = Infinity;
@@ -589,28 +825,32 @@ function detectPitch() {
                 closest = n;
             }
         }
-        document.getElementById("note").textContent = closest;
+        noteDisplay.textContent = closest;
+        
         if (minDiff < 2) {
-            document.getElementById("status").textContent = "In tune ✅";
+            statusDisplay.textContent = "Perfect! 🎯";
+            statusDisplay.style.color = '#4cc9f0';
         } else if (pitch < targetNotes[closest]) {
-            document.getElementById("status").textContent = "Too low ⬇️";
+            statusDisplay.textContent = "Too Low ⬇️";
+            statusDisplay.style.color = '#f72585';
         } else {
-            document.getElementById("status").textContent = "Too high ⬆️";
+            statusDisplay.textContent = "Too High ⬆️";
+            statusDisplay.style.color = '#f8961e';
         }
     } else {
-        document.getElementById("note").textContent = "---";
-        document.getElementById("status").textContent = "Play a string...";
+        noteDisplay.textContent = "---";
+        statusDisplay.textContent = "Play a guitar string...";
+        statusDisplay.style.color = '#6c757d';
     }
     requestAnimationFrame(detectPitch);
 }
 
-// Auto-correlation algorithm
 function autoCorrelate(buf, sampleRate) {
     let SIZE = buf.length;
     let rms = 0;
     for (let i = 0; i < SIZE; i++) { rms += buf[i]*buf[i]; }
     rms = Math.sqrt(rms/SIZE);
-    if (rms < 0.01) return -1; // silence
+    if (rms < 0.01) return -1;
     let r = new Array(SIZE).fill(0);
     for (let i = 0; i < SIZE; i++) {
         for (let j = 0; j < SIZE - i; j++) {
