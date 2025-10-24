@@ -6,17 +6,43 @@
 <title>Guitar Assistant</title>
 <style>
   :root {
-    --primary: #4361ee;
-    --secondary: #3a0ca3;
-    --success: #4cc9f0;
-    --danger: #f72585;
-    --warning: #f8961e;
-    --light: #f8f9fa;
-    --dark: #212529;
-    --gray: #6c757d;
-    --border-radius: 16px;
-    --shadow: 0 4px 20px rgba(0,0,0,0.1);
-    --transition: all 0.3s ease;
+    /* Light Theme */
+    --light-bg: #ffffff;
+    --light-surface: #f8f9fa;
+    --light-primary: #000000;
+    --light-secondary: #666666;
+    --light-accent: #007bff;
+    --light-border: #e0e0e0;
+    --light-hover: #f0f0f0;
+    
+    /* Dark Theme */
+    --dark-bg: #121212;
+    --dark-surface: #1e1e1e;
+    --dark-primary: #ffffff;
+    --dark-secondary: #aaaaaa;
+    --dark-accent: #4dabf7;
+    --dark-border: #333333;
+    --dark-hover: #2a2a2a;
+  }
+
+  [data-theme="light"] {
+    --bg: var(--light-bg);
+    --surface: var(--light-surface);
+    --primary: var(--light-primary);
+    --secondary: var(--light-secondary);
+    --accent: var(--light-accent);
+    --border: var(--light-border);
+    --hover: var(--light-hover);
+  }
+
+  [data-theme="dark"] {
+    --bg: var(--dark-bg);
+    --surface: var(--dark-surface);
+    --primary: var(--dark-primary);
+    --secondary: var(--dark-secondary);
+    --accent: var(--dark-accent);
+    --border: var(--dark-border);
+    --hover: var(--dark-hover);
   }
 
   * {
@@ -26,81 +52,93 @@
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: var(--dark);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--primary);
     min-height: 100vh;
-    padding: 20px;
+    transition: all 0.3s ease;
+    line-height: 1.6;
   }
 
   .app-container {
-    max-width: 1200px;
+    max-width: 600px;
     margin: 0 auto;
-    background: white;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    min-height: calc(100vh - 40px);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    padding: 20px;
   }
 
   /* Header */
   .app-header {
-    background: var(--primary);
-    color: white;
-    padding: 20px;
     text-align: center;
+    margin-bottom: 40px;
+    padding-top: 20px;
   }
 
   .app-title {
-    font-size: clamp(24px, 4vw, 32px);
+    font-size: 32px;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
   }
 
   .app-subtitle {
-    font-size: clamp(14px, 2vw, 16px);
-    opacity: 0.9;
+    font-size: 16px;
+    color: var(--secondary);
+    font-weight: 400;
+  }
+
+  /* Theme Toggle */
+  .theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+  }
+
+  .theme-toggle:hover {
+    background: var(--hover);
   }
 
   /* Navigation */
   .nav-tabs {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    background: var(--light);
-    border-bottom: 1px solid #dee2e6;
+    gap: 1px;
+    background: var(--border);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 40px;
   }
 
   .nav-tab {
-    padding: 20px 15px;
+    padding: 16px;
     text-align: center;
-    background: none;
+    background: var(--surface);
     border: none;
-    font-size: clamp(14px, 2vw, 16px);
-    font-weight: 600;
-    color: var(--gray);
+    color: var(--secondary);
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: var(--transition);
-    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+    border-radius: 8px;
   }
 
   .nav-tab.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-    background: white;
-  }
-
-  .nav-tab i {
-    display: block;
-    font-size: 24px;
-    margin-bottom: 8px;
+    background: var(--accent);
+    color: white;
   }
 
   /* Content Sections */
   .tab-content {
     flex: 1;
-    padding: 30px 20px;
     display: none;
   }
 
@@ -111,270 +149,244 @@
   /* Tuner Section */
   .tuner-display {
     text-align: center;
-    margin-bottom: 40px;
   }
 
   .note-display {
-    font-size: clamp(48px, 10vw, 80px);
-    font-weight: 800;
+    font-size: 80px;
+    font-weight: 300;
     color: var(--primary);
-    margin: 20px 0;
-    min-height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    margin: 40px 0 20px;
+    min-height: 96px;
+    letter-spacing: -2px;
   }
 
   .status-display {
-    font-size: clamp(18px, 3vw, 24px);
-    color: var(--gray);
-    min-height: 30px;
+    font-size: 18px;
+    color: var(--secondary);
+    min-height: 27px;
+    font-weight: 400;
   }
 
-  .tuner-visual {
+  .tuner-indicator {
     width: 200px;
-    height: 200px;
-    margin: 0 auto;
+    height: 4px;
+    background: var(--border);
+    margin: 60px auto;
+    border-radius: 2px;
     position: relative;
-    background: conic-gradient(from 0deg, #4cc9f0, #4361ee, #3a0ca3, #4361ee, #4cc9f0);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
-  .tuner-center {
-    width: 80%;
-    height: 80%;
-    background: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: bold;
+  .tuner-needle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 30px;
+    background: var(--accent);
+    transition: transform 0.1s ease;
   }
 
   /* Chords Section */
   .chords-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
     margin-bottom: 30px;
   }
 
   .chord-card {
-    background: white;
-    border: 2px solid #e9ecef;
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 20px 10px;
+    padding: 24px 12px;
     text-align: center;
     cursor: pointer;
-    transition: var(--transition);
-    font-weight: 600;
+    transition: all 0.2s ease;
+    font-weight: 500;
     font-size: 18px;
+    color: var(--primary);
   }
 
   .chord-card:hover {
-    border-color: var(--primary);
-    transform: translateY(-2px);
+    border-color: var(--accent);
   }
 
   .chord-card.active {
-    border-color: var(--success);
-    background: var(--success);
+    background: var(--accent);
     color: white;
+    border-color: var(--accent);
   }
 
   .chord-detail {
-    background: var(--light);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 25px;
+    padding: 30px;
     margin-top: 20px;
   }
 
   .chord-diagram {
-    font-family: 'Courier New', monospace;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
     white-space: pre;
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.4;
-    margin: 20px 0;
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
+    margin: 24px 0;
+    color: var(--primary);
   }
 
   /* Metronome Section */
   .metronome-display {
     text-align: center;
-    margin-bottom: 30px;
   }
 
   .bpm-controls {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
-    margin: 30px 0;
-    flex-wrap: wrap;
+    gap: 24px;
+    margin: 40px 0;
   }
 
   .bpm-btn {
-    width: 50px;
-    height: 50px;
-    border: none;
-    background: var(--primary);
-    color: white;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--primary);
     border-radius: 50%;
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .bpm-btn:active {
-    transform: scale(0.95);
+  .bpm-btn:hover {
+    border-color: var(--accent);
   }
 
   .bpm-display {
-    font-size: clamp(36px, 8vw, 48px);
-    font-weight: 800;
+    font-size: 48px;
+    font-weight: 300;
     color: var(--primary);
     min-width: 100px;
+    letter-spacing: -1px;
   }
 
   .bpm-input-container {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 20px 0;
+    gap: 12px;
+    margin: 24px 0;
     justify-content: center;
   }
 
   .bpm-input {
     width: 80px;
-    padding: 10px;
-    border: 2px solid #e9ecef;
+    padding: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--primary);
     border-radius: 8px;
-    font-size: 18px;
+    font-size: 16px;
     text-align: center;
-    font-weight: 600;
+    font-weight: 400;
   }
 
   .metronome-controls {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     justify-content: center;
-    margin: 20px 0;
-    flex-wrap: wrap;
+    margin: 30px 0;
   }
 
   .control-btn {
     padding: 12px 24px;
-    border: none;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--primary);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.2s ease;
   }
 
   .primary-btn {
-    background: var(--primary);
+    background: var(--accent);
     color: white;
-  }
-
-  .primary-btn:active {
-    background: var(--secondary);
-  }
-
-  .secondary-btn {
-    background: var(--light);
-    color: var(--dark);
-    border: 2px solid #e9ecef;
+    border-color: var(--accent);
   }
 
   .visual-beat {
-    width: 120px;
-    height: 120px;
-    margin: 30px auto;
+    width: 100px;
+    height: 100px;
+    margin: 40px auto;
     border-radius: 50%;
-    background: var(--light);
-    border: 4px solid #e9ecef;
-    transition: var(--transition);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: all 0.1s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--gray);
+    font-size: 24px;
+    color: var(--secondary);
   }
 
   .visual-beat.active {
-    background: var(--danger);
-    border-color: var(--danger);
+    background: var(--accent);
+    border-color: var(--accent);
     color: white;
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 
   .beat-counter {
     text-align: center;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--gray);
-    margin-top: 15px;
+    font-size: 16px;
+    color: var(--secondary);
+    margin-top: 16px;
   }
 
   /* Responsive Design */
   @media (max-width: 768px) {
-    body {
-      padding: 10px;
+    .app-container {
+      padding: 16px;
     }
 
-    .app-container {
-      min-height: calc(100vh - 20px);
+    .app-title {
+      font-size: 28px;
+    }
+
+    .note-display {
+      font-size: 64px;
+      margin: 30px 0 16px;
     }
 
     .nav-tab {
-      padding: 15px 10px;
-      font-size: 14px;
-    }
-
-    .nav-tab i {
-      font-size: 20px;
-    }
-
-    .tab-content {
-      padding: 20px 15px;
+      padding: 14px;
+      font-size: 13px;
     }
 
     .chords-grid {
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
     }
 
     .chord-card {
-      padding: 15px 8px;
+      padding: 20px 8px;
       font-size: 16px;
     }
 
-    .bpm-controls {
-      gap: 15px;
+    .bpm-display {
+      font-size: 40px;
     }
 
     .bpm-btn {
-      width: 45px;
-      height: 45px;
-      font-size: 20px;
-    }
-
-    .control-btn {
-      padding: 10px 20px;
-      font-size: 14px;
+      width: 40px;
+      height: 40px;
     }
   }
 
@@ -383,17 +395,17 @@
       grid-template-columns: 1fr;
     }
 
-    .nav-tab {
-      padding: 12px;
-    }
-
-    .chords-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
     .bpm-controls {
+      gap: 16px;
+    }
+
+    .metronome-controls {
       flex-direction: column;
-      gap: 10px;
+      align-items: center;
+    }
+
+    .control-btn {
+      width: 200px;
     }
   }
 
@@ -403,37 +415,39 @@
   .mt-20 { margin-top: 20px; }
   .hidden { display: none; }
 
-  /* Icons */
-  .icon {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+  /* Focus States */
+  button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 </style>
 </head>
-<body>
+<body data-theme="light">
   <div class="app-container">
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path id="theme-icon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+
     <header class="app-header">
-      <h1 class="app-title">🎸 Guitar Assistant</h1>
-      <p class="app-subtitle">Your all-in-one guitar toolkit</p>
+      <h1 class="app-title">Guitar</h1>
+      <p class="app-subtitle">Tuner • Chords • Metronome</p>
     </header>
 
     <nav class="nav-tabs">
       <button class="nav-tab active" data-tab="tuner">
-        <span>🎯</span>
         Tuner
       </button>
       <button class="nav-tab" data-tab="chords">
-        <span>🎵</span>
         Chords
       </button>
       <button class="nav-tab" data-tab="metronome">
-        <span>⏱️</span>
         Metronome
       </button>
     </nav>
@@ -441,17 +455,16 @@
     <!-- Tuner Section -->
     <section id="tuner" class="tab-content active">
       <div class="tuner-display">
-        <div class="note-display">---</div>
-        <div class="status-display">Play a guitar string to start tuning</div>
-      </div>
-      <div class="tuner-visual">
-        <div class="tuner-center">TUNE</div>
+        <div class="note-display">--</div>
+        <div class="status-display">Play a string</div>
+        <div class="tuner-indicator">
+          <div class="tuner-needle" id="tuner-needle"></div>
+        </div>
       </div>
     </section>
 
     <!-- Chords Section -->
     <section id="chords" class="tab-content">
-      <h2 class="text-center mb-20">Learn Guitar Chords</h2>
       <div class="chords-grid">
         <div class="chord-card" data-chord="C">C</div>
         <div class="chord-card" data-chord="D">D</div>
@@ -467,7 +480,7 @@
       <div class="chord-detail hidden">
         <h3 class="text-center" id="chord-name">Select a chord</h3>
         <div class="chord-diagram" id="chord-fingering">
-Select a chord from above to see the diagram
+Select a chord to see diagram
         </div>
         <div class="text-center" id="chord-notes"></div>
       </div>
@@ -475,8 +488,6 @@ Select a chord from above to see the diagram
 
     <!-- Metronome Section -->
     <section id="metronome" class="tab-content">
-      <h2 class="text-center mb-20">Metronome</h2>
-      
       <div class="metronome-display">
         <div class="bpm-controls">
           <button class="bpm-btn" id="bpm-down">-</button>
@@ -490,10 +501,10 @@ Select a chord from above to see the diagram
         </div>
 
         <div class="metronome-controls">
-          <select class="control-btn secondary-btn" id="time-signature">
-            <option value="4">4/4 Time</option>
-            <option value="3">3/4 Time</option>
-            <option value="6">6/8 Time</option>
+          <select class="control-btn" id="time-signature">
+            <option value="4">4/4</option>
+            <option value="3">3/4</option>
+            <option value="6">6/8</option>
           </select>
           <button class="control-btn primary-btn" id="metronome-toggle">Start</button>
         </div>
@@ -527,7 +538,7 @@ D |-2-|
 A |-3-|
 E |-X-|
     `,
-    notes: "Notes: C E G"
+    notes: "C E G"
   },
   "D": {
     fingering: `
@@ -538,7 +549,7 @@ D |-0-|
 A |-X-|
 E |-X-|
     `,
-    notes: "Notes: D F# A"
+    notes: "D F# A"
   },
   "E": {
     fingering: `
@@ -549,7 +560,7 @@ D |-2-|
 A |-2-|
 E |-0-|
     `,
-    notes: "Notes: E G# B"
+    notes: "E G# B"
   },
   "G": {
     fingering: `
@@ -560,7 +571,7 @@ D |-0-|
 A |-2-|
 E |-3-|
     `,
-    notes: "Notes: G B D"
+    notes: "G B D"
   },
   "A": {
     fingering: `
@@ -571,7 +582,7 @@ D |-2-|
 A |-0-|
 E |-X-|
     `,
-    notes: "Notes: A C# E"
+    notes: "A C# E"
   },
   "Am": {
     fingering: `
@@ -582,7 +593,7 @@ D |-2-|
 A |-0-|
 E |-X-|
     `,
-    notes: "Notes: A C E"
+    notes: "A C E"
   },
   "Em": {
     fingering: `
@@ -593,7 +604,7 @@ D |-2-|
 A |-2-|
 E |-0-|
     `,
-    notes: "Notes: E G B"
+    notes: "E G B"
   },
   "Dm": {
     fingering: `
@@ -604,7 +615,7 @@ D |-0-|
 A |-X-|
 E |-X-|
     `,
-    notes: "Notes: D F A"
+    notes: "D F A"
   },
   "F": {
     fingering: `
@@ -615,9 +626,32 @@ D |-3-|
 A |-3-|
 E |-1-|
     `,
-    notes: "Notes: F A C"
+    notes: "F A C"
   }
 };
+
+// Theme Management
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+const body = document.body;
+
+// Load saved theme or default to light
+const savedTheme = localStorage.getItem('theme') || 'light';
+body.setAttribute('data-theme', savedTheme);
+updateThemeIcon(savedTheme);
+
+themeToggle.addEventListener('click', () => {
+  const currentTheme = body.getAttribute('data-theme');
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  
+  body.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  updateThemeIcon(newTheme);
+});
+
+function updateThemeIcon(theme) {
+  // Icon doesn't change in minimalist design, but we keep the function for future
+}
 
 // State Management
 const state = {
@@ -668,7 +702,7 @@ document.querySelectorAll('.chord-card').forEach(card => {
     // Show chord details
     const chordDetail = document.querySelector('.chord-detail');
     chordDetail.classList.remove('hidden');
-    document.getElementById('chord-name').textContent = `${chord} Chord`;
+    document.getElementById('chord-name').textContent = chord;
     document.getElementById('chord-fingering').textContent = chordData.fingering;
     document.getElementById('chord-notes').textContent = chordData.notes;
   });
@@ -799,13 +833,14 @@ let analyser = audioCtx.createAnalyser();
 analyser.fftSize = 2048;
 let bufferLength = analyser.fftSize;
 let dataArray = new Float32Array(bufferLength);
+const tunerNeedle = document.getElementById('tuner-needle');
 
 navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
     const source = audioCtx.createMediaStreamSource(stream);
     source.connect(analyser);
     detectPitch();
 }).catch(err => {
-    console.log("Microphone access denied: " + err);
+    console.log("Microphone access needed for tuner");
 });
 
 function detectPitch() {
@@ -825,22 +860,31 @@ function detectPitch() {
                 closest = n;
             }
         }
-        noteDisplay.textContent = closest;
+        noteDisplay.textContent = closest.replace('E4', 'e').replace('B3', 'B').replace('G3', 'G').replace('D3', 'D').replace('A2', 'A').replace('E2', 'E');
         
-        if (minDiff < 2) {
-            statusDisplay.textContent = "Perfect! 🎯";
-            statusDisplay.style.color = '#4cc9f0';
-        } else if (pitch < targetNotes[closest]) {
-            statusDisplay.textContent = "Too Low ⬇️";
-            statusDisplay.style.color = '#f72585';
+        // Calculate needle position (-50% to 50%)
+        const targetPitch = targetNotes[closest];
+        const diff = pitch - targetPitch;
+        const maxDiff = 10; // Maximum deviation for visual indicator
+        const position = Math.max(-50, Math.min(50, (diff / maxDiff) * 50));
+        
+        tunerNeedle.style.transform = `translate(-50%, -50%) translateX(${position}%)`;
+        
+        if (minDiff < 1) {
+            statusDisplay.textContent = "In tune";
+            statusDisplay.style.color = 'var(--accent)';
+        } else if (pitch < targetPitch) {
+            statusDisplay.textContent = "Too low";
+            statusDisplay.style.color = 'var(--secondary)';
         } else {
-            statusDisplay.textContent = "Too High ⬆️";
-            statusDisplay.style.color = '#f8961e';
+            statusDisplay.textContent = "Too high";
+            statusDisplay.style.color = 'var(--secondary)';
         }
     } else {
-        noteDisplay.textContent = "---";
-        statusDisplay.textContent = "Play a guitar string...";
-        statusDisplay.style.color = '#6c757d';
+        noteDisplay.textContent = "--";
+        statusDisplay.textContent = "Play a string";
+        statusDisplay.style.color = 'var(--secondary)';
+        tunerNeedle.style.transform = 'translate(-50%, -50%)';
     }
     requestAnimationFrame(detectPitch);
 }
