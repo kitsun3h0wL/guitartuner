@@ -61,7 +61,7 @@
   }
 
   .app-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     min-height: 100vh;
     display: flex;
@@ -110,7 +110,7 @@
   /* Navigation */
   .nav-tabs {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1px;
     background: var(--border);
     border-radius: 12px;
@@ -187,38 +187,108 @@
     transition: transform 0.1s ease;
   }
 
-  /* Chords Section */
-  .chords-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 30px;
+  /* Library Sections */
+  .library-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
   }
 
-  .chord-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px 12px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  .library-tab {
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    color: var(--secondary);
+    font-size: 14px;
     font-weight: 500;
-    font-size: 18px;
-    color: var(--primary);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
   }
 
-  .chord-card:hover {
+  .library-tab.active {
+    background: var(--accent);
+    color: white;
+  }
+
+  .search-container {
+    margin-bottom: 20px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--primary);
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .search-input:focus {
+    outline: none;
     border-color: var(--accent);
   }
 
-  .chord-card.active {
+  .category-filter {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .category-btn {
+    padding: 8px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--primary);
+    font-size: 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .category-btn.active {
     background: var(--accent);
     color: white;
     border-color: var(--accent);
   }
 
-  .chord-detail {
+  /* Chords & Scales Grid */
+  .library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+
+  .library-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--primary);
+  }
+
+  .library-item:hover {
+    border-color: var(--accent);
+  }
+
+  .library-item.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  /* Detail View */
+  .detail-view {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -226,14 +296,154 @@
     margin-top: 20px;
   }
 
-  .chord-diagram {
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .detail-title {
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .detail-notes {
+    color: var(--secondary);
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .how-to-play {
+    background: var(--bg);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  .how-to-play h4 {
+    margin-bottom: 15px;
+    color: var(--accent);
+  }
+
+  .string-instruction {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+    padding: 8px;
+    background: var(--surface);
+    border-radius: 6px;
+  }
+
+  .string-name {
+    font-weight: 600;
+    min-width: 30px;
+    color: var(--accent);
+  }
+
+  .finger-position {
+    background: var(--accent);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .mute-string {
+    background: #dc3545;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .open-string {
+    background: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .diagram-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin: 30px 0;
+  }
+
+  .diagram {
     font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
     white-space: pre;
-    text-align: center;
     font-size: 14px;
     line-height: 1.4;
-    margin: 24px 0;
-    color: var(--primary);
+    background: var(--bg);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .fretboard-diagram {
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    white-space: pre;
+    font-size: 12px;
+    line-height: 1.3;
+    background: var(--bg);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .scale-notes {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .scale-note {
+    padding: 8px 12px;
+    background: var(--accent);
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .notes-on-fretboard {
+    margin-top: 20px;
+  }
+
+  .fretboard-notes {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .fretboard-note {
+    padding: 8px;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .fretboard-note.root {
+    background: var(--accent);
+    color: white;
+  }
+
+  .fretboard-note.scale {
+    background: #28a745;
+    color: white;
   }
 
   /* Metronome Section */
@@ -360,6 +570,10 @@
       font-size: 28px;
     }
 
+    .nav-tabs {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
     .note-display {
       font-size: 64px;
       margin: 30px 0 16px;
@@ -370,14 +584,14 @@
       font-size: 13px;
     }
 
-    .chords-grid {
-      grid-template-columns: repeat(3, 1fr);
+    .library-grid {
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
       gap: 8px;
     }
 
-    .chord-card {
-      padding: 20px 8px;
-      font-size: 16px;
+    .diagram-container {
+      grid-template-columns: 1fr;
+      gap: 20px;
     }
 
     .bpm-display {
@@ -387,6 +601,10 @@
     .bpm-btn {
       width: 40px;
       height: 40px;
+    }
+
+    .fretboard-notes {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
@@ -406,6 +624,10 @@
 
     .control-btn {
       width: 200px;
+    }
+
+    .fretboard-notes {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
@@ -437,15 +659,15 @@
 
     <header class="app-header">
       <h1 class="app-title">Guitar</h1>
-      <p class="app-subtitle">Tuner • Chords • Metronome</p>
+      <p class="app-subtitle">Tuner • Chords • Scales • Metronome</p>
     </header>
 
     <nav class="nav-tabs">
       <button class="nav-tab active" data-tab="tuner">
         Tuner
       </button>
-      <button class="nav-tab" data-tab="chords">
-        Chords
+      <button class="nav-tab" data-tab="library">
+        Library
       </button>
       <button class="nav-tab" data-tab="metronome">
         Metronome
@@ -463,26 +685,85 @@
       </div>
     </section>
 
-    <!-- Chords Section -->
-    <section id="chords" class="tab-content">
-      <div class="chords-grid">
-        <div class="chord-card" data-chord="C">C</div>
-        <div class="chord-card" data-chord="D">D</div>
-        <div class="chord-card" data-chord="E">E</div>
-        <div class="chord-card" data-chord="G">G</div>
-        <div class="chord-card" data-chord="A">A</div>
-        <div class="chord-card" data-chord="Am">Am</div>
-        <div class="chord-card" data-chord="Em">Em</div>
-        <div class="chord-card" data-chord="Dm">Dm</div>
-        <div class="chord-card" data-chord="F">F</div>
+    <!-- Library Section -->
+    <section id="library" class="tab-content">
+      <div class="library-tabs">
+        <button class="library-tab active" data-library="chords">Chords</button>
+        <button class="library-tab" data-library="scales">Scales</button>
       </div>
 
-      <div class="chord-detail hidden">
-        <h3 class="text-center" id="chord-name">Select a chord</h3>
-        <div class="chord-diagram" id="chord-fingering">
-Select a chord to see diagram
+      <!-- Search -->
+      <div class="search-container">
+        <input type="text" class="search-input" id="search-input" placeholder="Search chords/scales...">
+      </div>
+
+      <!-- Chords Library -->
+      <div id="chords-library" class="library-content">
+        <div class="category-filter" id="chords-filter">
+          <button class="category-btn active" data-category="all">All</button>
+          <button class="category-btn" data-category="major">Major</button>
+          <button class="category-btn" data-category="minor">Minor</button>
+          <button class="category-btn" data-category="seventh">7th</button>
+          <button class="category-btn" data-category="suspended">Sus</button>
         </div>
-        <div class="text-center" id="chord-notes"></div>
+
+        <div class="library-grid" id="chords-grid">
+          <!-- Chords will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Scales Library -->
+      <div id="scales-library" class="library-content hidden">
+        <div class="category-filter" id="scales-filter">
+          <button class="category-btn active" data-category="all">All</button>
+          <button class="category-btn" data-category="major">Major</button>
+          <button class="category-btn" data-category="minor">Minor</button>
+          <button class="category-btn" data-category="pentatonic">Pentatonic</button>
+          <button class="category-btn" data-category="blues">Blues</button>
+        </div>
+
+        <div class="library-grid" id="scales-grid">
+          <!-- Scales will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Detail View -->
+      <div class="detail-view hidden" id="detail-view">
+        <div class="detail-header">
+          <h2 class="detail-title" id="detail-title">Select an item</h2>
+        </div>
+        <div class="detail-notes" id="detail-notes"></div>
+        
+        <!-- How to Play Section -->
+        <div class="how-to-play" id="how-to-play">
+          <h4>How to Play:</h4>
+          <div id="playing-instructions">
+            Select a chord to see playing instructions
+          </div>
+        </div>
+        
+        <div class="diagram-container">
+          <div>
+            <h4>Diagram</h4>
+            <div class="diagram" id="detail-diagram"></div>
+          </div>
+          <div>
+            <h4>Fretboard</h4>
+            <div class="fretboard-diagram" id="detail-fretboard"></div>
+          </div>
+        </div>
+
+        <div class="notes-on-fretboard">
+          <h4>Notes on Fretboard</h4>
+          <div class="fretboard-notes" id="fretboard-notes">
+            <!-- Notes will be populated by JavaScript -->
+          </div>
+        </div>
+
+        <div id="scale-notes-container" class="hidden">
+          <h4>Scale Notes</h4>
+          <div class="scale-notes" id="scale-notes"></div>
+        </div>
       </div>
     </section>
 
@@ -518,142 +799,526 @@ Select a chord to see diagram
   </div>
 
 <script>
-// Configuration
-const targetNotes = {
-  "E4": 329.63,
-  "B3": 246.94,
-  "G3": 196.00,
-  "D3": 146.83,
-  "A2": 110.00,
-  "E2": 82.41
-};
-
-const chords = {
-  "C": {
-    fingering: `
+// Extensive Guitar Library Data with Detailed Playing Instructions
+const guitarLibrary = {
+  chords: {
+    major: [
+      { 
+        name: "C", 
+        notes: "C E G", 
+        category: "major",
+        diagram: "x32010", 
+        fingering: `
 e |-0-|
 B |-1-|
 G |-0-|
 D |-2-|
 A |-3-|
-E |-X-|
-    `,
-    notes: "C E G"
-  },
-  "D": {
-    fingering: `
+E |-x-|`,
+        playingInstructions: [
+          { string: "6th (E)", action: "mute", details: "Don't play this string" },
+          { string: "5th (A)", action: "fret", fret: 3, finger: "Ring finger" },
+          { string: "4th (D)", action: "fret", fret: 2, finger: "Middle finger" },
+          { string: "3rd (G)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "2nd (B)", action: "fret", fret: 1, finger: "Index finger" },
+          { string: "1st (e)", action: "fret", fret: 0, finger: "Open string" }
+        ],
+        fretboardNotes: ["C3", "E3", "G3", "C4", "E4"],
+        rootNote: "C"
+      },
+      { 
+        name: "D", 
+        notes: "D F# A", 
+        category: "major",
+        diagram: "xx0232", 
+        fingering: `
 e |-2-|
 B |-3-|
 G |-2-|
 D |-0-|
-A |-X-|
-E |-X-|
-    `,
-    notes: "D F# A"
-  },
-  "E": {
-    fingering: `
+A |-x-|
+E |-x-|`,
+        playingInstructions: [
+          { string: "6th (E)", action: "mute", details: "Don't play this string" },
+          { string: "5th (A)", action: "mute", details: "Don't play this string" },
+          { string: "4th (D)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "3rd (G)", action: "fret", fret: 2, finger: "Middle finger" },
+          { string: "2nd (B)", action: "fret", fret: 3, finger: "Ring finger" },
+          { string: "1st (e)", action: "fret", fret: 2, finger: "Index finger" }
+        ],
+        fretboardNotes: ["D3", "A3", "D4", "F#4"],
+        rootNote: "D"
+      },
+      { 
+        name: "E", 
+        notes: "E G# B", 
+        category: "major",
+        diagram: "022100", 
+        fingering: `
 e |-0-|
 B |-0-|
 G |-1-|
 D |-2-|
 A |-2-|
-E |-0-|
-    `,
-    notes: "E G# B"
-  },
-  "G": {
-    fingering: `
+E |-0-|`,
+        playingInstructions: [
+          { string: "6th (E)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "5th (A)", action: "fret", fret: 2, finger: "Middle finger" },
+          { string: "4th (D)", action: "fret", fret: 2, finger: "Ring finger" },
+          { string: "3rd (G)", action: "fret", fret: 1, finger: "Index finger" },
+          { string: "2nd (B)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "1st (e)", action: "fret", fret: 0, finger: "Open string" }
+        ],
+        fretboardNotes: ["E2", "E3", "G#3", "B3", "E4"],
+        rootNote: "E"
+      },
+      { 
+        name: "G", 
+        notes: "G B D", 
+        category: "major",
+        diagram: "320003", 
+        fingering: `
 e |-3-|
 B |-0-|
 G |-0-|
 D |-0-|
 A |-2-|
-E |-3-|
-    `,
-    notes: "G B D"
-  },
-  "A": {
-    fingering: `
-e |-0-|
-B |-2-|
-G |-2-|
-D |-2-|
-A |-0-|
-E |-X-|
-    `,
-    notes: "A C# E"
-  },
-  "Am": {
-    fingering: `
+E |-3-|`,
+        playingInstructions: [
+          { string: "6th (E)", action: "fret", fret: 3, finger: "Pinky finger" },
+          { string: "5th (A)", action: "fret", fret: 2, finger: "Index finger" },
+          { string: "4th (D)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "3rd (G)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "2nd (B)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "1st (e)", action: "fret", fret: 3, finger: "Ring finger" }
+        ],
+        fretboardNotes: ["G2", "G3", "B3", "D4", "G4"],
+        rootNote: "G"
+      }
+    ],
+    minor: [
+      { 
+        name: "Am", 
+        notes: "A C E", 
+        category: "minor",
+        diagram: "x02210", 
+        fingering: `
 e |-0-|
 B |-1-|
 G |-2-|
 D |-2-|
 A |-0-|
-E |-X-|
-    `,
-    notes: "A C E"
-  },
-  "Em": {
-    fingering: `
+E |-x-|`,
+        playingInstructions: [
+          { string: "6th (E)", action: "mute", details: "Don't play this string" },
+          { string: "5th (A)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "4th (D)", action: "fret", fret: 2, finger: "Ring finger" },
+          { string: "3rd (G)", action: "fret", fret: 2, finger: "Middle finger" },
+          { string: "2nd (B)", action: "fret", fret: 1, finger: "Index finger" },
+          { string: "1st (e)", action: "fret", fret: 0, finger: "Open string" }
+        ],
+        fretboardNotes: ["A2", "E3", "A3", "C4", "E4"],
+        rootNote: "A"
+      },
+      { 
+        name: "Em", 
+        notes: "E G B", 
+        category: "minor",
+        diagram: "022000", 
+        fingering: `
 e |-0-|
 B |-0-|
 G |-0-|
 D |-2-|
 A |-2-|
-E |-0-|
-    `,
-    notes: "E G B"
-  },
-  "Dm": {
-    fingering: `
-e |-1-|
+E |-0-|`,
+        playingInstructions: [
+          { string: "6th (E)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "5th (A)", action: "fret", fret: 2, finger: "Middle finger" },
+          { string: "4th (D)", action: "fret", fret: 2, finger: "Ring finger" },
+          { string: "3rd (G)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "2nd (B)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "1st (e)", action: "fret", fret: 0, finger: "Open string" }
+        ],
+        fretboardNotes: ["E2", "E3", "G3", "B3", "E4"],
+        rootNote: "E"
+      }
+    ],
+    seventh: [
+      { 
+        name: "C7", 
+        notes: "C E G Bb", 
+        category: "seventh",
+        diagram: "x32310", 
+        fingering: `
+e |-0-|
+B |-1-|
+G |-3-|
+D |-2-|
+A |-3-|
+E |-x-|`,
+        playingInstructions: [
+          { string: "6th (E)", action: "mute", details: "Don't play this string" },
+          { string: "5th (A)", action: "fret", fret: 3, finger: "Ring finger" },
+          { string: "4th (D)", action: "fret", fret: 2, finger: "Middle finger" },
+          { string: "3rd (G)", action: "fret", fret: 3, finger: "Pinky finger" },
+          { string: "2nd (B)", action: "fret", fret: 1, finger: "Index finger" },
+          { string: "1st (e)", action: "fret", fret: 0, finger: "Open string" }
+        ],
+        fretboardNotes: ["C3", "E3", "G3", "Bb3", "C4", "E4"],
+        rootNote: "C"
+      }
+    ],
+    suspended: [
+      { 
+        name: "Dsus4", 
+        notes: "D G A", 
+        category: "suspended",
+        diagram: "xx0233", 
+        fingering: `
+e |-3-|
 B |-3-|
 G |-2-|
 D |-0-|
-A |-X-|
-E |-X-|
-    `,
-    notes: "D F A"
+A |-x-|
+E |-x-|`,
+        playingInstructions: [
+          { string: "6th (E)", action: "mute", details: "Don't play this string" },
+          { string: "5th (A)", action: "mute", details: "Don't play this string" },
+          { string: "4th (D)", action: "fret", fret: 0, finger: "Open string" },
+          { string: "3rd (G)", action: "fret", fret: 2, finger: "Middle finger" },
+          { string: "2nd (B)", action: "fret", fret: 3, finger: "Ring finger" },
+          { string: "1st (e)", action: "fret", fret: 3, finger: "Pinky finger" }
+        ],
+        fretboardNotes: ["D3", "A3", "D4", "G4"],
+        rootNote: "D"
+      }
+    ]
   },
-  "F": {
-    fingering: `
-e |-1-|
-B |-1-|
-G |-2-|
-D |-3-|
-A |-3-|
-E |-1-|
-    `,
-    notes: "F A C"
+  scales: {
+    pentatonic: [
+      { 
+        name: "A Minor Pentatonic", 
+        notes: "A C D E G", 
+        category: "pentatonic",
+        pattern: [9,0,2,4,7], 
+        diagram: `
+e|-----------------5--8--|
+B|-------------5--8------|
+G|----------5--7---------|
+D|-----5--7--------------|
+A|--5--7-----------------|
+E|--5--------------------|`,
+        playingInstructions: [
+          "Start on 5th fret of low E string (A note)",
+          "Play pattern: 5-8, 5-7, 5-7, 5-7, 5-8, 5-8",
+          "Use index finger for 5th fret, pinky for 8th fret",
+          "Practice going up and down the scale slowly"
+        ],
+        fretboardNotes: ["A2", "C3", "D3", "E3", "G3", "A3", "C4", "D4", "E4", "G4", "A4"],
+        rootNote: "A"
+      }
+    ]
   }
 };
 
 // Theme Management
 const themeToggle = document.getElementById('theme-toggle');
-const themeIcon = document.getElementById('theme-icon');
 const body = document.body;
-
-// Load saved theme or default to light
 const savedTheme = localStorage.getItem('theme') || 'light';
 body.setAttribute('data-theme', savedTheme);
-updateThemeIcon(savedTheme);
 
 themeToggle.addEventListener('click', () => {
   const currentTheme = body.getAttribute('data-theme');
   const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-  
   body.setAttribute('data-theme', newTheme);
   localStorage.setItem('theme', newTheme);
-  updateThemeIcon(newTheme);
 });
 
-function updateThemeIcon(theme) {
-  // Icon doesn't change in minimalist design, but we keep the function for future
+// Library State
+let currentLibrary = 'chords';
+let currentCategory = 'all';
+let currentSearch = '';
+
+// Library Management
+function initializeLibrary() {
+  renderChords();
+  renderScales();
+  
+  // Add event listeners to library items
+  document.querySelectorAll('.library-item').forEach(item => {
+    item.addEventListener('click', showItemDetail);
+  });
 }
 
-// State Management
+function renderChords() {
+  const chordsGrid = document.getElementById('chords-grid');
+  chordsGrid.innerHTML = '';
+  
+  const allChords = Object.values(guitarLibrary.chords).flat();
+  const filteredChords = filterItems(allChords, currentCategory, currentSearch);
+  
+  filteredChords.forEach(chord => {
+    const chordElement = document.createElement('div');
+    chordElement.className = 'library-item';
+    chordElement.textContent = chord.name;
+    chordElement.dataset.item = JSON.stringify(chord);
+    chordElement.dataset.type = 'chord';
+    chordsGrid.appendChild(chordElement);
+  });
+}
+
+function renderScales() {
+  const scalesGrid = document.getElementById('scales-grid');
+  scalesGrid.innerHTML = '';
+  
+  const allScales = Object.values(guitarLibrary.scales).flat();
+  const filteredScales = filterItems(allScales, currentCategory, currentSearch);
+  
+  filteredScales.forEach(scale => {
+    const scaleElement = document.createElement('div');
+    scaleElement.className = 'library-item';
+    scaleElement.textContent = scale.name;
+    scaleElement.dataset.item = JSON.stringify(scale);
+    scaleElement.dataset.type = 'scale';
+    scalesGrid.appendChild(scaleElement);
+  });
+}
+
+function filterItems(items, category, search) {
+  return items.filter(item => {
+    const matchesCategory = category === 'all' || item.category === category;
+    const matchesSearch = search === '' || 
+      item.name.toLowerCase().includes(search.toLowerCase()) ||
+      item.notes.toLowerCase().includes(search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+}
+
+function showItemDetail(event) {
+  const item = JSON.parse(event.target.dataset.item);
+  const type = event.target.dataset.type;
+  
+  // Update active item
+  document.querySelectorAll('.library-item').forEach(i => i.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  // Show detail view
+  const detailView = document.getElementById('detail-view');
+  detailView.classList.remove('hidden');
+  
+  // Update detail content
+  document.getElementById('detail-title').textContent = item.name;
+  document.getElementById('detail-notes').textContent = `Notes: ${item.notes}`;
+  document.getElementById('detail-diagram').textContent = item.fingering || item.diagram;
+  
+  // Show playing instructions
+  displayPlayingInstructions(item, type);
+  
+  // Generate fretboard diagram
+  generateFretboardDiagram(item, type);
+  
+  // Show notes on fretboard
+  displayFretboardNotes(item);
+  
+  // Show scale notes if it's a scale
+  const scaleNotesContainer = document.getElementById('scale-notes-container');
+  const scaleNotes = document.getElementById('scale-notes');
+  
+  if (type === 'scale') {
+    scaleNotesContainer.classList.remove('hidden');
+    scaleNotes.innerHTML = '';
+    item.notes.split(' ').forEach(note => {
+      const noteElement = document.createElement('div');
+      noteElement.className = 'scale-note';
+      noteElement.textContent = note;
+      scaleNotes.appendChild(noteElement);
+    });
+  } else {
+    scaleNotesContainer.classList.add('hidden');
+  }
+}
+
+function displayPlayingInstructions(item, type) {
+  const instructionsElement = document.getElementById('playing-instructions');
+  instructionsElement.innerHTML = '';
+  
+  if (type === 'chord' && item.playingInstructions) {
+    item.playingInstructions.forEach(instruction => {
+      const instructionElement = document.createElement('div');
+      instructionElement.className = 'string-instruction';
+      
+      let actionHTML = '';
+      if (instruction.action === 'fret') {
+        actionHTML = `<span class="finger-position">Fret ${instruction.fret}</span> - ${instruction.finger}`;
+      } else if (instruction.action === 'mute') {
+        actionHTML = `<span class="mute-string">MUTE</span> - ${instruction.details}`;
+      } else if (instruction.action === 'open') {
+        actionHTML = `<span class="open-string">OPEN</span> - Play open string`;
+      }
+      
+      instructionElement.innerHTML = `
+        <span class="string-name">${instruction.string}</span>
+        ${actionHTML}
+      `;
+      
+      instructionsElement.appendChild(instructionElement);
+    });
+    
+    // Add strumming instruction
+    const strumElement = document.createElement('div');
+    strumElement.className = 'string-instruction';
+    strumElement.style.marginTop = '15px';
+    strumElement.style.paddingTop = '15px';
+    strumElement.style.borderTop = '1px solid var(--border)';
+    strumElement.innerHTML = `
+      <span class="string-name">🎸</span>
+      <strong>Strumming:</strong> Strum from the ${getLowestPlayedString(item.playingInstructions)} string down
+    `;
+    instructionsElement.appendChild(strumElement);
+    
+  } else if (type === 'scale' && item.playingInstructions) {
+    item.playingInstructions.forEach(instruction => {
+      const instructionElement = document.createElement('div');
+      instructionElement.className = 'string-instruction';
+      instructionElement.innerHTML = `
+        <span class="string-name">•</span>
+        ${instruction}
+      `;
+      instructionsElement.appendChild(instructionElement);
+    });
+  } else {
+    instructionsElement.innerHTML = '<div class="string-instruction">No specific playing instructions available</div>';
+  }
+}
+
+function getLowestPlayedString(instructions) {
+  const stringOrder = ["6th (E)", "5th (A)", "4th (D)", "3rd (G)", "2nd (B)", "1st (e)"];
+  for (let string of stringOrder) {
+    const instruction = instructions.find(inst => inst.string === string);
+    if (instruction && instruction.action !== 'mute') {
+      return string.split(' ')[1].replace('(', '').replace(')', ''); // Returns "E", "A", etc.
+    }
+  }
+  return "5th";
+}
+
+function generateFretboardDiagram(item, type) {
+  const fretboardElement = document.getElementById('detail-fretboard');
+  
+  if (type === 'chord') {
+    // Simple chord fretboard representation
+    fretboardElement.textContent = `
+Nut |---|---|---|---|---|
+E || ${item.fretboardNotes.includes('E2') ? '●' : ' '} |   |   |   |   |
+B || ${item.fretboardNotes.includes('B2') ? '●' : ' '} |   |   |   |   |
+G || ${item.fretboardNotes.includes('G2') ? '●' : ' '} |   |   |   |   |
+D || ${item.fretboardNotes.includes('D3') ? '●' : ' '} |   |   |   |   |
+A || ${item.fretboardNotes.includes('A2') ? '●' : ' '} |   |   |   |   |
+E || ${item.fretboardNotes.includes('E2') ? '●' : ' '} |   |   |   |   |
+    `;
+  } else {
+    // Scale fretboard representation (first 5 frets)
+    fretboardElement.textContent = `
+Nut | 1 | 2 | 3 | 4 | 5 |
+E || ${item.fretboardNotes.includes('E2') ? '●' : ' '} | ${item.fretboardNotes.includes('F2') ? '●' : ' '} | ${item.fretboardNotes.includes('F#2') ? '●' : ' '} | ${item.fretboardNotes.includes('G2') ? '●' : ' '} | ${item.fretboardNotes.includes('G#2') ? '●' : ' '} |
+B || ${item.fretboardNotes.includes('B2') ? '●' : ' '} | ${item.fretboardNotes.includes('C3') ? '●' : ' '} | ${item.fretboardNotes.includes('C#3') ? '●' : ' '} | ${item.fretboardNotes.includes('D3') ? '●' : ' '} | ${item.fretboardNotes.includes('D#3') ? '●' : ' '} |
+G || ${item.fretboardNotes.includes('G2') ? '●' : ' '} | ${item.fretboardNotes.includes('G#2') ? '●' : ' '} | ${item.fretboardNotes.includes('A2') ? '●' : ' '} | ${item.fretboardNotes.includes('A#2') ? '●' : ' '} | ${item.fretboardNotes.includes('B2') ? '●' : ' '} |
+D || ${item.fretboardNotes.includes('D3') ? '●' : ' '} | ${item.fretboardNotes.includes('D#3') ? '●' : ' '} | ${item.fretboardNotes.includes('E3') ? '●' : ' '} | ${item.fretboardNotes.includes('F3') ? '●' : ' '} | ${item.fretboardNotes.includes('F#3') ? '●' : ' '} |
+A || ${item.fretboardNotes.includes('A2') ? '●' : ' '} | ${item.fretboardNotes.includes('A#2') ? '●' : ' '} | ${item.fretboardNotes.includes('B2') ? '●' : ' '} | ${item.fretboardNotes.includes('C3') ? '●' : ' '} | ${item.fretboardNotes.includes('C#3') ? '●' : ' '} |
+E || ${item.fretboardNotes.includes('E2') ? '●' : ' '} | ${item.fretboardNotes.includes('F2') ? '●' : ' '} | ${item.fretboardNotes.includes('F#2') ? '●' : ' '} | ${item.fretboardNotes.includes('G2') ? '●' : ' '} | ${item.fretboardNotes.includes('G#2') ? '●' : ' '} |
+    `;
+  }
+}
+
+function displayFretboardNotes(item) {
+  const fretboardNotesElement = document.getElementById('fretboard-notes');
+  fretboardNotesElement.innerHTML = '';
+  
+  item.fretboardNotes.forEach(note => {
+    const noteElement = document.createElement('div');
+    noteElement.className = `fretboard-note ${note.includes(item.rootNote) ? 'root' : 'scale'}`;
+    noteElement.textContent = note;
+    fretboardNotesElement.appendChild(noteElement);
+  });
+}
+
+// Library Tabs
+document.querySelectorAll('.library-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const targetLibrary = tab.dataset.library;
+    currentLibrary = targetLibrary;
+    
+    // Update active library tab
+    document.querySelectorAll('.library-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    
+    // Show target library
+    document.querySelectorAll('.library-content').forEach(content => content.classList.add('hidden'));
+    document.getElementById(`${targetLibrary}-library`).classList.remove('hidden');
+    
+    // Hide detail view when switching libraries
+    document.getElementById('detail-view').classList.add('hidden');
+    document.querySelectorAll('.library-item').forEach(item => item.classList.remove('active'));
+    
+    // Reset category and re-render
+    currentCategory = 'all';
+    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.category-btn[data-category="all"]').forEach(btn => btn.classList.add('active'));
+    
+    if (targetLibrary === 'chords') {
+      renderChords();
+    } else {
+      renderScales();
+    }
+  });
+});
+
+// Category Filters
+document.querySelectorAll('.category-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const category = btn.dataset.category;
+    currentCategory = category;
+    
+    // Update active category
+    btn.parentElement.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // Re-render current library
+    if (currentLibrary === 'chords') {
+      renderChords();
+    } else {
+      renderScales();
+    }
+    
+    // Hide detail view when changing category
+    document.getElementById('detail-view').classList.add('hidden');
+    document.querySelectorAll('.library-item').forEach(item => item.classList.remove('active'));
+  });
+});
+
+// Search Functionality
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('input', (e) => {
+  currentSearch = e.target.value;
+  
+  if (currentLibrary === 'chords') {
+    renderChords();
+  } else {
+    renderScales();
+  }
+  
+  // Hide detail view when searching
+  document.getElementById('detail-view').classList.add('hidden');
+  document.querySelectorAll('.library-item').forEach(item => item.classList.remove('active'));
+});
+
+// Initialize the library when the page loads
+initializeLibrary();
+
+// ... (rest of the existing JavaScript code for tuner and metronome remains the same)
+
+// State Management for existing functionality
 const state = {
   currentTab: 'tuner',
   metronome: {
@@ -686,25 +1351,6 @@ document.querySelectorAll('.nav-tab').forEach(tab => {
     if (targetTab !== 'metronome' && state.metronome.isPlaying) {
       stopMetronome();
     }
-  });
-});
-
-// Chord Selection
-document.querySelectorAll('.chord-card').forEach(card => {
-  card.addEventListener('click', () => {
-    const chord = card.dataset.chord;
-    const chordData = chords[chord];
-    
-    // Update active card
-    document.querySelectorAll('.chord-card').forEach(c => c.classList.remove('active'));
-    card.classList.add('active');
-    
-    // Show chord details
-    const chordDetail = document.querySelector('.chord-detail');
-    chordDetail.classList.remove('hidden');
-    document.getElementById('chord-name').textContent = chord;
-    document.getElementById('chord-fingering').textContent = chordData.fingering;
-    document.getElementById('chord-notes').textContent = chordData.notes;
   });
 });
 
@@ -828,6 +1474,15 @@ function scheduleNote(beatNumber, time) {
 }
 
 // Tuner Functionality
+const targetNotes = {
+  "E4": 329.63,
+  "B3": 246.94,
+  "G3": 196.00,
+  "D3": 146.83,
+  "A2": 110.00,
+  "E2": 82.41
+};
+
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let analyser = audioCtx.createAnalyser();
 analyser.fftSize = 2048;
@@ -865,7 +1520,7 @@ function detectPitch() {
         // Calculate needle position (-50% to 50%)
         const targetPitch = targetNotes[closest];
         const diff = pitch - targetPitch;
-        const maxDiff = 10; // Maximum deviation for visual indicator
+        const maxDiff = 10;
         const position = Math.max(-50, Math.min(50, (diff / maxDiff) * 50));
         
         tunerNeedle.style.transform = `translate(-50%, -50%) translateX(${position}%)`;
